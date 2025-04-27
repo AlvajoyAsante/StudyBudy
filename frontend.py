@@ -12,7 +12,7 @@ groq_client = Groq(api_key=groq_api_key)
 # --- Helper Function to Call Groq ---
 def chat_with_groq(prompt: str) -> str:
     response = groq_client.chat.completions.create(
-        model="mixtral-8x7b-32768",  # You can change to llama3-70b or others if needed
+        model="llama3-70b-8192",  # You can change to llama3-70b or others if needed
         messages=[{"role": "user", "content": prompt}]
     )
     return response.choices[0].message.content
