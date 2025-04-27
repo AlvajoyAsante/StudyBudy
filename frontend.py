@@ -1,8 +1,21 @@
 import streamlit as st
-import requests
+from groq import Groq
 from io import BytesIO
 from fpdf import FPDF
 import fitz  # PyMuPDF for reading PDFs
+import os
+
+# --- Initialize Groq API ---
+groq_api_key = st.secrets["GROQ_API_KEY"] if "GROQ_API_KEY" in st.secrets else os.getenv("GROQ_API_KEY")
+groq_client = Groq(api_key=groq_api_key)
+
+# --- Helper Function to Call Groq ---
+def chat_with_groq(prompt: str) -> str:
+    response = groq_client.chat.completions.create(
+        model="mixtral-8x7b-32768",  # You can change to llama3-70b or others if needed
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return response.choices[0].message.content
 
 # --- Helper Function to Generate PDF for Download ---
 def generate_pdf(text, title="StudyBudy Output"):
@@ -12,9 +25,6 @@ def generate_pdf(text, title="StudyBudy Output"):
     pdf.multi_cell(0, 10, title + "\n\n" + text)
     pdf_output = pdf.output(dest='S').encode('latin-1')
     return BytesIO(pdf_output)
-
-# --- Base URL for Backend ---
-API_BASE_URL = "http://localhost:8000"
 
 # --- Streamlit Page Configuration ---
 st.set_page_config(page_title="StudyBudy - Educational Assistant", layout="wide")
@@ -101,55 +111,46 @@ option = st.sidebar.selectbox("Choose Action", [
     "Ask a Question",
 ])
 
-# --- Action Buttons and API Calls ---
+# --- Action Buttons and Logic ---
 if option != "Ask a Question":
     if st.button("Run"):
         if not transcript_text.strip():
             st.error("Please paste a lecture transcript or upload a PDF.")
         else:
-            endpoint_map = {
-                "Summarize Lecture": "/summarize",
-                "Extract Key Concepts": "/key_concepts",
-                "Generate Quiz": "/generate_quiz"
-            }
-            endpoint = endpoint_map[option]
-            response = requests.post(API_BASE_URL + endpoint, json={"content": transcript_text})
-            if response.status_code == 200:
-                result = list(response.json().values())[0]
-                st.text_area(f"{option} Output", result, height=300)
-                
-                # --- PDF Download Button ---
-                pdf_file = generate_pdf(result, title=f"{option} Output")
-                st.download_button(
-                    label="📄 Download Output as PDF",
-                    data=pdf_file,
-                    file_name="studybudy_output.pdf",
-                    mime="application/pdf",
-                )
-            else:
-                st.error("API Error: " + response.text)
+            if option == "Summarize Lecture":
+                prompt = f"Summarize the following lecture into key points:\n\n{transcript_text}\n\nSummary:"
+            elif option == "Extract Key Concepts":
+                prompt = f"Extract key concepts and definitions from the following lecture:\n\n{transcript_text}\n\nKey Concepts:"
+            elif option == "Generate Quiz":
+                prompt = f"Generate 5 multiple-choice questions based on this lecture:\n\n{transcript_text}\n\nQuiz Questions:"
+            
+            result = chat_with_groq(prompt)
+            st.text_area(f"{option} Output", result, height=300)
+            
+            # --- PDF Download Button ---
+            pdf_file = generate_pdf(result, title=f"{option} Output")
+            st.download_button(
+                label="📄 Download Output as PDF",
+                data=pdf_file,
+                file_name="studybudy_output.pdf",
+                mime="application/pdf",
+            )
 else:
     question_text = st.text_input("Ask a question about the lecture")
     if st.button("Get Answer"):
         if not transcript_text.strip() or not question_text.strip():
             st.error("Please provide both transcript and question.")
         else:
-            response = requests.post(API_BASE_URL + "/ask", json={
-                "question": question_text,
-                "transcript": transcript_text
-            })
-            if response.status_code == 200:
-                answer = response.json()['answer']
-                st.success("Answer:")
-                st.write(answer)
-                
-                # --- PDF Download for Answer ---
-                pdf_file = generate_pdf(answer, title="Answer Output")
-                st.download_button(
-                    label="📄 Download Answer as PDF",
-                    data=pdf_file,
-                    file_name="studybudy_answer.pdf",
-                    mime="application/pdf",
-                )
-            else:
-                st.error("API Error: " + response.text)
+            prompt = f"Lecture:\n{transcript_text}\n\nQuestion: {question_text}\n\nAnswer:"
+            answer = chat_with_groq(prompt)
+            st.success("Answer:")
+            st.write(answer)
+
+            # --- PDF Download for Answer ---
+            pdf_file = generate_pdf(answer, title="Answer Output")
+            st.download_button(
+                label="📄 Download Answer as PDF",
+                data=pdf_file,
+                file_name="studybudy_answer.pdf",
+                mime="application/pdf",
+            )
