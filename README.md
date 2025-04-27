@@ -48,19 +48,19 @@ The frontend will open automatically at: http://localhost:8501
 
 ### 📂 Project Structure
 
-├── backend.py         # FastAPI backend for processing LLM prompts
-├── frontend.py        # Streamlit frontend for user interaction
-├── requirements.txt   # Python dependencies
-├── README.md          # Project documentation (this file)
-└── .gitignore         # Git ignored files
+STUDY BUDDY/
+├── backend.py
+├── frontend.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+└── .streamlit/
+    └── config.toml
 
 ### 💡 Future Improvements
 Allow users to upload lecture audio/video and auto-transcribe.
-
 Save user transcripts and question history in a database.
-
 Add login and user authentication system.
-
 Enhance the UI with custom themes and better styling.
 
 ### ✨ Demo (Coming Soon!)

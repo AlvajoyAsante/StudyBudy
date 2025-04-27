@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import os
 from groq import Groq  # Correct import
+# from fastapi import UploadFile, File
+
 
 # Initialize FastAPI
 app = FastAPI()
@@ -47,3 +49,20 @@ def generate_quiz(transcript: Transcript):
 def ask_question(q: Question):
     prompt = f"Lecture:\n{q.transcript}\n\nQuestion: {q.question}\n\nAnswer:"
     return {"answer": chat_with_groq(prompt)}
+
+# @app.post("/transcribe")
+# async def transcribe_audio(file: UploadFile = File(...)):
+#     try:
+#         import openai
+
+#         # Save uploaded file temporarily
+#         with open(f"temp_{file.filename}", "wb") as f:
+#             f.write(await file.read())
+
+#         # Transcribe using OpenAI Whisper model (Groq-compatible if needed)
+#         audio_file = open(f"temp_{file.filename}", "rb")
+#         transcript = openai.Audio.transcribe("whisper-1", audio_file)
+#         return {"transcript": transcript["text"]}
+#     except Exception as e:
+#         print(f"Error transcribing audio: {e}")
+#         return {"error": "Failed to transcribe audio."}
