@@ -31,18 +31,12 @@ cd StudyBudy
 pip install -r requirements.txt
 ```
 
-### 3. Start the Backend (FastAPI)
-
-```bash
-python -m uvicorn backend:app --reload
-```
-
 The backend will be running at: http://localhost:8000
 
-### 4. Start the Frontend (Streamlit)
+### 3. Start the Frontend (Streamlit)
 
 ```bash
-streamlit run frontend.py
+streamlit run app.py
 ```
 
 The frontend will open automatically at: http://localhost:8501
@@ -75,6 +69,5 @@ StudyBudy/
 - Add login and user authentication system  
 - Enhance the UI with custom themes and better styling  
 
-### ✨ Demo (Coming Soon!)
-
-Stay tuned for a live demo showcasing StudyBudy in action!  
+### ✨ Demo 
+https://ai-study-budy.streamlit.app/
