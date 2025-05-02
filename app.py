@@ -7,6 +7,7 @@ import os
 
 # --- Initialize Groq API ---
 groq_api_key = st.secrets["GROQ_API_KEY"] if "GROQ_API_KEY" in st.secrets else os.getenv("GROQ_API_KEY")
+
 groq_client = Groq(api_key=groq_api_key)
 
 # --- Helper Function to Call Groq ---
@@ -27,7 +28,7 @@ def generate_pdf(text, title="StudyBudy Output"):
     return BytesIO(pdf_output)
 
 # --- Streamlit Page Configuration ---
-st.set_page_config(page_title="StudyBudy - Educational Assistant", layout="wide")
+st.set_page_config(page_title="StudyBudy - AI Educational Assistant", layout="wide")
 
 # --- Sidebar Theme Switcher ---
 theme_option = st.sidebar.selectbox(
@@ -118,11 +119,27 @@ if option != "Ask a Question":
             st.error("Please paste a lecture transcript or upload a PDF.")
         else:
             if option == "Summarize Lecture":
-                prompt = f"Summarize the following lecture into key points:\n\n{transcript_text}\n\nSummary:"
+                prompt = f"""First, carefully read the lecture text to understand the overall topic and objective.
+                        Next, identify the main sections or topics covered.
+                        Then, extract the important ideas or arguments from each section.
+                        After that, group related ideas together to avoid redundancy.
+                        Finally, organize the extracted ideas into clear, concise bullet points, ensuring logical flow and completeness.
+                        Now, summarize the following lecture into key points:\n\n{transcript_text}\n\nSummary:"""
             elif option == "Extract Key Concepts":
-                prompt = f"Extract key concepts and definitions from the following lecture:\n\n{transcript_text}\n\nKey Concepts:"
+                prompt = f"""First, carefully read through the entire lecture text to understand the general subject area.
+                        Then, identify and extract key concepts, important terms, and major ideas that are emphasized.
+                        For each key concept, find and extract any definition or explanation associated with it.
+                        Organize the concepts and definitions clearly, ensuring they are concise and accurately reflect the lecture material.
+                        Now, extract key concepts and definitions from the following lecture:\n\n{transcript_text}\n\nKey Concepts:"""
             elif option == "Generate Quiz":
-                prompt = f"Generate 5 multiple-choice questions based on this lecture:\n\n{transcript_text}\n\nQuiz Questions:"
+                prompt = f"""Carefully read and understand the lecture provided.
+                Identify the key concepts, definitions, processes, and real-world applications mentioned in the lecture.
+                Based on this understanding, create 10 multiple-choice questions following such policy:
+                1)Each question should test application, analysis, or understanding, not just direct recall.
+                2)Each question must have 1 correct answer and 3 realistic but incorrect (distractor) options.
+                3)Ensure questions are clear, concise, and relevant to the core ideas from the lecture.
+                4)Do not provide the answer immediately after each question.
+                After all 10 questions are listed, provide a separate Answer Key section at the end.\n\n{transcript_text}\n\nQuiz Questions:"""
             
             result = chat_with_groq(prompt)
             st.text_area(f"{option} Output", result, height=300)
