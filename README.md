@@ -51,8 +51,7 @@ The app will open automatically at: http://localhost:8000
 
 ```plaintext
 StudyBudy/
-├── backend.py
-├── frontend.py
+├── app.py
 ├── requirements.txt
 ├── README.md
 ├── .gitignore
