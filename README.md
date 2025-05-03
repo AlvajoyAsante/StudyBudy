@@ -31,15 +31,13 @@ cd StudyBudy
 pip install -r requirements.txt
 ```
 
-The backend will be running at: http://localhost:8000
-
 ### 3. Start the Frontend (Streamlit)
 
 ```bash
 streamlit run app.py
 ```
 
-The frontend will open automatically at: http://localhost:8501
+The app will open automatically at: http://localhost:8000
 
 ### ⚙️ Technologies Used
 
@@ -58,8 +56,6 @@ StudyBudy/
 ├── requirements.txt
 ├── README.md
 ├── .gitignore
-└── .streamlit/
-    └── config.toml
 ```
 
 ### 💡 Future Improvements
@@ -70,4 +66,4 @@ StudyBudy/
 - Enhance the UI with custom themes and better styling  
 
 ### ✨ Demo 
-https://ai-study-budy.streamlit.app/
+https://my-ai-study-buddy.streamlit.app/
