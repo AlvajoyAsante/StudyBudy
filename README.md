@@ -1,6 +1,6 @@
 # 📚 StudyBudy
 
-![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)  ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)  ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)  ![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)  ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)  ![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)
 
 An AI-powered educational assistant that helps students by:
 
@@ -38,8 +38,7 @@ The app will open automatically at: http://localhost:8000
 
 ### ⚙️ Technologies Used
 
-- 🛠 Python  
-- ⚡ FastAPI (Backend API)  
+- 🛠 Python 
 - 🎨 Streamlit (Frontend UI)  
 - 🧠 Groq API (LLM Engine)  
 - 🔥 OpenAI Python SDK (Connected to Groq)  
